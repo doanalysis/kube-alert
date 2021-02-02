@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kube-alert
+  namespace: monitoring
+  labels:
+    app: kube-alert
+spec:
+  template:
+    metadata:
+      name: kube-alert
+      labels:
+        app: kube-alert
+    spec:
+      containers:
+        - name: redpoint
+          image: registry.cn-beijing.aliyuncs.com/octopus-tool/kube-alert:#Tag
+          imagePullPolicy: IfNotPresent
+          command: ["/kube-alert"]
+          env:
+            - name: aliyun_logs_kube-alert
+              value: stdout
+      restartPolicy: OnFailure
+      imagePullSecrets:
+        - name: ali-image-key
+
